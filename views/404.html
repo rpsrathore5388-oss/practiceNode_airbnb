@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #e8eef1;
+    --ink: #12263a;
+    --muted: #4d6073;
+    --accent: #2f6bff;
+    --on-accent: #ffffff;
+    --font: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1c2a;
+      --ink: #e6eef5;
+      --muted: #9db0c2;
+      --accent: #6c9bff;
+      --on-accent: #0f1c2a;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  main { max-width: 34rem; }
+
+  .code {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(4px, 2vw, 16px);
+    font-size: clamp(6rem, 28vw, 13rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin: 0 0 8px;
+  }
+  .ring {
+    position: relative;
+    display: inline-block;
+    width: 0.62em;
+    height: 0.62em;
+    border: 0.13em solid currentColor;
+    border-radius: 50%;
+  }
+  .dot {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0.16em; height: 0.16em;
+    margin: -0.08em 0 0 -0.08em;
+    background: var(--accent);
+    border-radius: 50%;
+    transition: transform 0.12s ease-out;
+  }
+
+  h1 { font-size: clamp(1.4rem, 4vw, 1.9rem); margin: 0 0 12px; }
+  p { color: var(--muted); font-size: 1.05rem; line-height: 1.6; margin: 0 0 28px; }
+
+  .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    font: inherit;
+    font-weight: 700;
+    padding: 12px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid var(--accent);
+  }
+  .btn.primary { background: var(--accent); color: var(--on-accent); }
+  .btn.secondary { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .btn:hover { filter: brightness(1.08); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="code" aria-hidden="true">
+    <span>4</span><span class="ring"><span class="dot" id="dot"></span></span><span>4</span>
+  </div>
+  <h1>We can’t find that page</h1>
+  <p>The link may be broken, or the page may have moved. Check the address for typos, or head back to somewhere that works.</p>
+  <div class="actions">
+    <a class="btn primary" href="/">Go to homepage</a>
+    <button class="btn secondary" type="button" onclick="history.length > 1 ? history.back() : location.assign('/')">Go back</button>
+  </div>
+</main>
+
+<script>
+  // The dot inside the zero follows the pointer.
+  (function () {
+    var dot = document.getElementById('dot');
+    if (!dot || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.addEventListener('pointermove', function (e) {
+      var r = dot.parentElement.getBoundingClientRect();
+      var dx = e.clientX - (r.left + r.width / 2);
+      var dy = e.clientY - (r.top + r.height / 2);
+      var dist = Math.hypot(dx, dy) || 1;
+      var max = r.width * 0.22;
+      var k = Math.min(dist, max) / dist;
+      dot.style.transform = 'translate(' + dx * k + 'px,' + dy * k + 'px)';
+    });
+  })();
+</script>
+</body>
+</html>
